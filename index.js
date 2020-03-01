@@ -3,7 +3,7 @@ const {Client, RichEmbed} = require('discord.js');
 const client = new Client();
 
 const config = require('./config.json');
-const TOKEN = config.token;
+client.login(config.token);
 const PREFIX = config.prefix;
 const VERSION = config.version;
 
@@ -84,5 +84,3 @@ client.on('message', msg => {
 client.once('disconnect', () => {
     console.log('Goodbye');
 });
-
-client.login(TOKEN);
