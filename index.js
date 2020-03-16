@@ -24,6 +24,22 @@ const memberFile = './data/memberInfo.json';
 let memberJSON = require(memberFile);
 let memberInfo = {JSON : memberJSON, location : memberFile, type : 'member'};
 
+let exec = require('child_process').exec;
+
+const usablecommandFile = './data/commandInfo.json';
+let usable = require(usablecommandFile);
+
+let botPackage =
+    {discord: Discord,
+     client: client,
+     prefix: PREFIX,
+     version: VERSION,
+     commands: client.commands,
+     factionInfo: factionInfo,
+     memberInfo: memberInfo,
+     exec: exec,
+     msg: null,
+     args: null};
 
 //this puts the bot into the "Online" state
 client.once('ready', () =>{
@@ -32,8 +48,19 @@ client.once('ready', () =>{
 
 //this handles commands
 client.on('message', msg => {
+    botPackage.msg = msg;
     if(msg.content.startsWith(PREFIX)){
         const args = msg.content.substring(PREFIX.length).split(' ');
+        botPackage.args = args;
+        let cmd = args[0];
+        if(usable.commands.includes(cmd))
+            client.commands.get(cmd).execute(botPackage);
+        else
+            msg.reply('You cannot use this command! Please refer to !help for a command list!').then(
+                (message) => {
+                    botPackage.commands.get('chatCleaner').execute(message, msg, 3000);
+                });
+        /*
         const server = msg.guild;
         switch(args[0]){
             case 'help':
@@ -67,6 +94,50 @@ client.on('message', msg => {
             case 'clear':
                 client.commands.get('clear').execute(msg, args);
                 break;
+            case 'mc':
+                let terminal = 'gnome-terminal; '
+                let sleep = 'sleep 1; ';
+                let run = 'xdotool key Return; ';
+                let exit = 'exit';
+                function execute(error, stdout, stderr){
+                    if(error){
+                        console.log(error);
+                        return;
+                    }
+                    console.log(stdout);
+                    console.log(stderr);
+                }
+                if(args[1] === 'start'){
+                    let start = 'xdotool type "mcstart"; ';
+                    let cmd = terminal+sleep+start+run;
+                    exec(cmd, execute);
+                    msg.reply('The server is starting!');
+                } else if(args[1] === 'stop'){
+                    let stop = 'xdotool type "mcstop"; ';
+                    let cmd = terminal+sleep+stop+run;
+                    exec(cmd, execute);
+                    msg.reply('The server is stopping!');
+                } else if(args[1] === 'save'){
+                    let save = 'xdotool type "mcsave"; ';
+                    let cmd = terminal+sleep+save+run;
+                    exec(cmd, execute);
+                    msg.reply('The server is saving!');
+                }
+                break;
+            case 'bot':
+                function execute(error, stdout, stderr){
+                    if(error){
+                        console.log(error);
+                        return;
+                    }
+                    console.log(stdout);
+                    console.log(stderr);
+                }
+                msg.channel.send()
+                if(args[1] === 'off'){
+                    exec('gnome-terminal; sleep 1; xdotool getactivewindow set_window --name TEMPMANAGER; xdotool type "stopWarbot; exit;"; xdotool key Return;', execute);
+                }
+                break;
             case 'setupServer':
                 client.commands.get('setupServer').execute(msg, server);
                 break;
@@ -77,8 +148,9 @@ client.on('message', msg => {
                 client.commands.get('info').execute(msg, args[1], VERSION);
                 break;
         }
+        */
     } else
-        client.commands.get('greeting').execute(msg, client);
+        botPackage.commands.get('greeting').execute(botPackage);
 });
 
 client.once('disconnect', () => {

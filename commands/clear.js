@@ -1,9 +1,14 @@
 module.exports = {
     name : 'clear',
     description : 'provides the ability to clear the server\'s chat',
-    execute(msg, args){
+    execute(botPackage){
+        msg = botPackage.msg;
+        args = botPackage.args;
         if(args.length <  2){
-            msg.reply('Please give me the number of messages to delete.');
+            msg.reply('Please give me the number of messages to delete.').then(
+                (message) => {
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 3000);
+                });
             return;
         }
         if(args[1] === 'all'){

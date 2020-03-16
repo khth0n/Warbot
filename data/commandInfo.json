@@ -1,0 +1,14 @@
+{
+    "commands": [
+        "addFaction",
+        "author",
+        "bot",
+        "clear",
+        "faction",
+        "help",
+        "id",
+        "info",
+        "mc",
+        "setupServer"
+    ]
+}

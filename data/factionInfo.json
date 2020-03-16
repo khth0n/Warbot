@@ -1,3 +1,11 @@
 {
-  "factions": []
+  "factions": [
+    {
+      "name": "BOBBYROSSY",
+      "leaderRole": "Leader of the BOBBYROSSY",
+      "leader": "loltyler1",
+      "memberRole": "Member of the BOBBYROSSY",
+      "members": []
+    }
+  ]
 }

@@ -1,12 +1,15 @@
 module.exports = {
     name : 'addFaction',
     description : 'provides the user with the ability to add members to a faction',
-    execute(msg, server, fileInfo){
+    execute(botPackage){
+        msg = botPackage.msg;
+        server = msg.guild;
+        fileInfo = botPackage.factionInfo;
         const memberName = msg.cleanContent.slice(13);
         if(!memberName){
             msg.reply('Please provide me with the name of the member you would like to add to the faction!').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(msg, message, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
             return;
         }
@@ -14,7 +17,7 @@ module.exports = {
         if(!member){
             msg.reply('Invalid name! Please provide me with the valid name of a member to add!').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(msg, message, 4000);
+                    botPacakge.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
             return;
         }
@@ -22,14 +25,14 @@ module.exports = {
         if(!faction){
             msg.reply('You are not the leader of a faction! You cannot add a member without being the faction\'s leader!').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(msg, message, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
             return;
         }
         if(faction.members.includes(member.displayName) || member.displayName === faction.leader){
             msg.reply('You cannot invite a person to a faction that they are already apart of!').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(msg, message, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
             return;
         }

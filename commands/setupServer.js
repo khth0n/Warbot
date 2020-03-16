@@ -1,8 +1,10 @@
 module.exports = {
-    name : 'setupServer',
-    description : 'provides the setup required for full functionality of the bot',
-    execute(msg, server){
-      server.client.commands.get('deleteFaction').execute(msg, server);
+   name : 'setupServer',
+   description : 'provides the setup required for full functionality of the bot',
+   execute(botPackage){
+      msg = botPackage.msg;
+      server = msg.guild;
+      botPackage.commands.get('deleteFaction').execute(botPackage);
       server.defaultRole.setPermissions(0);
       if(!server.roles.find(role => role.name === 'Recruit'))
          server.createRole(

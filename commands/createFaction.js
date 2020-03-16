@@ -1,24 +1,27 @@
 module.exports = {
     name : 'createFaction',
     description : 'provides the user with the ability to create factions',
-    execute(msg, server, fileInfo){
+    execute(botPackage){
+        msg = botPackage.msg;
+        server = msg.guild;
+        fileInfo = botPackage.factionInfo;
         const factionName = msg.content.slice(16);
         if(!factionName){
             msg.reply('Please provide me the name of the faction you want to create when calling this command.').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(message, msg, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
             return;
         }
         if(factionName === 'all')
             msg.reply('Cannot create a faction called \'all\' because it is used in a faction command.').then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(message, msg, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
         else if(server.channels.find(channel => channel.name === factionName))
             msg.reply(`${factionName} already exists! Please contact the faction\'s leader for an invite!`).then(
                 (message) => {
-                    server.client.commands.get('chatCleaner').execute(message, msg, 4000);
+                    botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                 });
         else {
             let recruitRole = server.roles.find(role => role.name === 'Recruit');

@@ -1,7 +1,9 @@
 module.exports = {
     name : 'id',
     description : 'provides the user with the ability to id themselves and other users',
-    execute(msg, Discord){
+    execute(botPackage){
+        msg = botPackage.msg;
+        Discord = botPackage.discord;
         const arg = msg.cleanContent.slice(4);
         switch(arg){
             case '':
@@ -23,7 +25,7 @@ module.exports = {
                 if(!member){
                     msg.reply('Member does not exist!').then(
                         (message) => {
-                            msg.guild.client.commands.get('chatCleaner').execute(message, msg, 3000);
+                            botPackage.commands.get('chatCleaner').execute(message, msg, 3000);
                         });
                     break;
                 }

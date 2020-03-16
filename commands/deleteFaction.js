@@ -1,7 +1,10 @@
 module.exports = {
     name : 'deleteFaction',
     description : 'provides the user with the ability to delete factions',
-    execute(msg, server, fileInfo){
+    execute(botPackage){
+        msg = botPackage.msg;
+        server = msg.guild;
+        fileInfo = botPackage.factionInfo;
         const factionName = msg.content.slice(16);
         switch(factionName){
             case '':
@@ -11,7 +14,7 @@ module.exports = {
                 }
                 msg.reply('Please give me the name of faction you would like to delete. This requires that you be the last possible member of the faction.').then(
                     (message) => {
-                        server.client.commands.get('chatCleaner').execute(message, msg, 4000);
+                        server.client.commands.get('chatCleaner').execute(msg, message, 4000);
                     });
                 break;
             case 'all':
@@ -24,7 +27,7 @@ module.exports = {
                 if(!server.channels.find(channel => channel.name === factionName)){
                     msg.reply('The given faction does not exist! Please keep in mind that deletion requires case-sensitivity!').then(
                         (message) => {
-                            server.client.commands.get('chatCleaner').execute(message, msg, 4000);
+                            botPackage.commands.get('chatCleaner').execute(msg, message, 4000);
                         });
                     break;
                 }

@@ -1,14 +1,15 @@
 module.exports = {
     name : 'greeting',
     description : 'provides a greeting upon stimulation',
-    execute(msg, client){
+    execute(botPackage){
+        msg = botPackage.msg;
         if(!msg.member)
             return;
         let args = msg.content.split(' ');
         const greeting = getGreeting(args[0]);
         switch(greeting){
             case null:
-                if(!(msg.member.toString() === client.user.toString()) && msg.cleanContent.includes('@Warbot'))
+                if(!(msg.member.toString() === botPackage.client.user.toString()) && msg.cleanContent.includes('@Warbot'))
                     msg.reply('I will provide you with a copy of the server rules and the bot commands. Check your DMs.');
                 break;
             default:
