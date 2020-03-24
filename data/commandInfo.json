@@ -1,14 +1,22 @@
 {
+    "administrator":
+    {
+        "usernames": [
+            "AvertYourEyesPlz"
+        ],
+        "privileges": [
+            "mc",
+            "bot"
+        ]
+    },
     "commands": [
-        "addFaction",
         "author",
-        "bot",
         "clear",
         "faction",
         "help",
         "id",
         "info",
-        "mc",
-        "setupServer"
-    ]
+        "setup"
+    ],
+    "restricted": []
 }
