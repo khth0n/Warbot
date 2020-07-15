@@ -1,0 +1,111 @@
+{
+  "cfg": "help",
+  "stems": [
+    {
+      "cmd": "author",
+      "usage": "!author",
+      "associated": [
+        "check out Warbot's creator!"
+      ]
+    },
+    {
+      "cmd": "clear",
+      "usage": "!clear [num]",
+      "associated": [
+        "all"
+      ]
+    },
+    {
+      "cmd": "faction",
+      "usage": "!faction [command] (options)",
+      "associated": [
+        "create",
+        "delete",
+        "add",
+        "remove"
+      ],
+      "branches": [
+        "create",
+        "delete",
+        "add",
+        "remove"
+      ]
+    },
+    {
+      "cmd": "help",
+      "usage": "!help [command]",
+      "associated": [
+        "update",
+        "reset"
+      ]
+    },
+    {
+      "cmd": "id",
+      "usage": "!id [@]",
+      "associated": [
+        "@here",
+        "@everyone",
+        "@member",
+        "@Warbot"
+      ]
+    },
+    {
+      "cmd": "info",
+      "usage": "!info [query]",
+      "associated": [
+        "author",
+        "version"
+      ]
+    },
+    {
+      "cmd": "setup",
+      "usage": "!setup [commands]",
+      "associated": [
+        "server",
+        "greeting"
+      ],
+      "branches": [
+        "server",
+        "greeting"
+      ]
+    }
+  ],
+  "branches": [
+    {
+      "cmd": "faction",
+      "syntaxArr": [
+        "!faction create [string]",
+        "!faction delete [string]",
+        "!faction add [member]",
+        "!faction remove [member]"
+      ],
+      "exampleArr": [
+        "!faction create Legumes of Legend",
+        "!faction delete Legumes of Legend",
+        "!faction add @Warbot",
+        "!faction remove @Warbot"
+      ],
+      "behaviorArr": [
+        "Creates a faction as specified by [string]",
+        "Deletes a faction as specified by [string]",
+        "Sends a faction invitation to the specified [member]",
+        "Removes the specified [member] from the faction"
+      ]
+    },
+    {
+      "cmd": "setup",
+      "syntaxArr": [
+        "!setup server",
+        "!setup greeting (+/-)[triggers/responses/reset/basic] [string | ... ]"
+      ],
+      "exampleArr": [
+        "!setup server //BEWARE: WILL CLEAR LOTS OF SERVER STUFF",
+        "!setup greeting +triggers hi | yo //Use pipe character for multiple entries"
+      ],
+      "behaviorArr": [
+        "Formats server configurations to best suit Warbot",
+        "Configures the bot's greeting functionality"
+      ]
+    }
+  ]
+}

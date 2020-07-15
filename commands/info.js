@@ -1,6 +1,11 @@
 module.exports = {
-    name : 'info',
-    description : 'provides various information about the bot and author',
+    name: 'info',
+    description: 'provides various information about the bot and author',
+    usage: '!info [query]',
+    associated: [
+        'author',
+        'version'
+    ],
     execute(botPackage){
         let msg = botPackage.msg;
         let arg = botPackage.args[1];

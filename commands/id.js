@@ -1,6 +1,13 @@
 module.exports = {
     name : 'id',
     description : 'provides the user with the ability to id themselves and other users',
+    usage: '!id [@]',
+    associated: [
+        '@here',
+        '@everyone',
+        '@member',
+        '@Warbot'
+    ],
     execute(botPackage){
         let msg = botPackage.msg;
         let channel = msg.channel;
@@ -8,6 +15,7 @@ module.exports = {
         let db = botPackage.db;
         let Discord = botPackage.discord;
         let arg = botPackage.args[1];
+
         switch(arg){
             case undefined:
                 generateEmbed(channel, msg.member, db, Discord);
@@ -18,25 +26,18 @@ module.exports = {
                 });
                 break;
             case '@everyone':
-                server.members.forEach(member => {
+                server.members.cache.forEach(member => {
                     generateEmbed(channel, member, db, Discord);
                 });
                 break;
             default:
                 arg = arg.substring(3, arg.length - 1);
-                let sql = `SELECT userid FROM members WHERE userid = '${arg}'`;
-                db.query(sql, (err, result) => {
-                    if(err) throw err;
-                    console.log(result);
-                    if(!result.length){
-                        msg.reply('Member does not exist!').then(
-                            (message) => {
-                                botPackage.commands.get('chatCleaner').execute(msg, message);
-                            }).catch((error) => { console.log(error.stack); });
-                        return;
-                    }
-                    generateEmbed(channel, server.members.get(result[0].userid), db, Discord);
-                });
+                let member = server.members.cache.get(arg);
+                if(!member){
+                    botPackage.cleaner(msg, 'Member does not exist!');
+                    return;
+                }
+                generateEmbed(channel, member, db, Discord);
                 break;
         }
         msg.delete();
@@ -46,37 +47,39 @@ module.exports = {
 function generateEmbed(channel, member, db, Discord){
     var lastActivity = member.lastMessage;
     if(!member.lastMessage)
-        lastActivity = 'A long time ago';
+        lastActivity = 'No recent messages logged';
     else
         lastActivity = lastActivity.createdAt.toLocaleString();
-    let sql = `SELECT username, balance, faction FROM members WHERE userid = '${member.id}'`;
-    db.query(sql, (err, result) => {
+    db.collection('members').findOne({_id: member.id}, (err, result) => {
         if(err) throw err;
         console.log(result);
-        let faction = result[0].faction;
-        let embed = new Discord.RichEmbed(
-            {title: `${member.displayName} (${result[0].username})`,
-             description: '**```ml\nLast online : ' + lastActivity + '```**',
-             color: member.highestRole.color})
-             .setThumbnail(member.user.avatarURL)
-             .addField('Balance', `$${result[0].balance}`, true)
-             .addField('Rank', member.highestRole.name, true);
+        let apparentRole = member.roles.cache.get(result.role);
+        let embed = new Discord.MessageEmbed({
+            title: member.displayName,
+            description: member.user.username,
+            color: apparentRole.color
+        })
+        .setURL(result.url)
+        .setThumbnail(member.user.avatarURL({dynamic: true, size: 4096}))
+        .addFields(
+            {name: 'Quote', value: result.quote, inline: true},
+            {name: 'Alias', value: result.alias, inline: true},
+            {name: 'Balance', value: `$${result.balance}`, inline: true},
+            {name: 'Rank', value: apparentRole.name, inline: true}
+        );
+        let faction = result.faction;
         if(!faction){
-            embed.addField('Faction', 'None', true)
-                 .setFooter('The Art of Warbot', member.guild.iconURL);
+            embed.addField('Faction', 'None', true);
+            embed.setFooter('The Art of Warbot', member.guild.iconURL({dynamic: true, size: 4096}));
             channel.send(embed);
             return;
         }
-        sql = `SELECT motto FROM factions WHERE name = '${faction}'`;
-        db.query(sql, (err, result) => {
+        db.collection('factions').findOne({_id: faction }, (err, result) => {
             if(err) throw err;
             console.log(result);
-            if(!result[0].motto){
-                embed.addField('Faction', `${faction}`, true)
-                     .setFooter('All\'s fair in love and Warbot', member.guild.iconURL);
-                channel.send(embed);
-                return;
-            }
+            embed.addField('Faction', faction, true);
+            embed.setFooter(result.motto, member.guild.iconURL({dynamic: true, size: 4096}));
+            channel.send(embed);
         });
     });
 }

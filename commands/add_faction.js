@@ -1,6 +1,9 @@
 module.exports = {
-    name : 'add_faction',
-    description : 'provides the user with the ability to add members to a faction',
+    name: 'faction_add',
+    description: 'provides the user with the ability to add members to a faction',
+    syntax: '!faction add [member]',
+    example: '!faction add @Warbot',
+    behavior: 'Sends a faction invitation to the specified [member]',
     execute(botPackage){
         let msg = botPackage.msg;
         let arg = botPackage.args[2];

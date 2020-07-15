@@ -1,0 +1,22 @@
+{
+  "cfg": "cmd",
+  "administrator": {
+    "ids": [
+      "359050342123569168"
+    ],
+    "privileges": [
+      "mc",
+      "bot"
+    ]
+  },
+  "commands": [
+    "author",
+    "clear",
+    "faction",
+    "help",
+    "id",
+    "info",
+    "setup"
+  ],
+  "restricted": []
+}

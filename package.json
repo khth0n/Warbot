@@ -9,7 +9,7 @@
   "author": "Isaiah Cordova",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "mysql": "^2.18.1"
+    "discord.js": "^12.2.0",
+    "mongodb": "^3.5.7"
   }
 }

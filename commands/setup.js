@@ -1,25 +1,26 @@
 module.exports = {
     name: 'setup',
     description: 'provides the user with the ability to configure different bot/server functionalities',
-    execute(botPackage){
-        let msg = botPackage.msg;
-        let arg = botPackage.args[1];
-        let commands = botPackage.commands;
-        if(!arg){
-            msg.reply('Please specify a bot or server functionality you would like to configure!').then(
-                (message) => {
-                    commands.get('chatCleaner').execute(msg, message);
-                }).catch((error) => { console.log(error.stack); });
-            return;
+    usage: '!setup [commands]',
+    associated: [
+        'server',
+        'greeting'
+    ],
+    branches: [
+        'server',
+        'greeting'
+    ],
+    execute({msg, args, commands, cleaner, prefix, ...rest}){
+        let arg = args[1];
+
+        switch(arg){
+            case undefined:
+                cleaner(msg, 'Please specify a bot or server functionality you would like to configure!');
+                return;
+            default:
+                let cmd = `setup_${arg.toLowerCase()}`;
+                if(!commands(cmd, {msg, args, commands, cleaner, ...rest}))
+                    cleaner(msg, `This is an invalid setup command! Please try another command or refer to ${prefix}help for proper usage!`);
         }
-        let cmd = `setup_${arg.toLowerCase()}`;
-        if(!commands.get(cmd)){
-            msg.reply('This is an invalid setup command! Please try another command or refer to !help.').then(
-                (message) => {
-                    commands.get('chatCleaner').execute(msg, message);
-                }).catch((error) => { console.log(error.stack); });
-            return;
-        }
-        commands.get(cmd).execute(botPackage);
     }
 }

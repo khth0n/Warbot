@@ -1,6 +1,9 @@
 module.exports = {
-    name : 'remove_faction',
-    description : 'provides the user with the ability to remove members from a faction',
+    name: 'faction_remove',
+    description: 'provides the user with the ability to remove members from a faction',
+    syntax: '!faction remove [member]',
+    example: '!faction remove @Warbot',
+    behavior: 'Removes the specified [member] from the faction',
     execute(botPackage){
         let msg = botPackage.msg;
         let server = msg.guild;
